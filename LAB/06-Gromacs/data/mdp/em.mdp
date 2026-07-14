@@ -1,44 +1,16 @@
-include                  = 
-define                   =
-integrator               = steep
-dt                       = 0.001
-nsteps                   = 1000
-init_step                = 0
-simulation_part          = 1
-comm-mode                = Linear
-nstcomm                  = 1
-comm-grps                = system
+title       = Amber steepest descent enrgy minimisation
 
-emtol                    = 1000
-emstep                   = 0.01
-niter                    = 20
-fcstep                   = 0
-nstcgsteep               = 1000
-nbfgscorr                = 10
-
-nstxout                  = 10
-nstvout                  = 0
-nstfout                  = 0
-nstlog                   = 10
-nstcalcenergy            = 10
-nstenergy                = 10
-nstxtcout                = 10
-
-cutoff-scheme            = Verlet
-nstlist                  = 20
-ns-type                  = Grid
-pbc                      = xyz
-rlist                    = 1.0
-coulombtype              = pme
-coulomb-modifier         = Potential-shift-Verlet
-rcoulomb-switch          = 1.0
-rcoulomb                 = 1.0
-vdw-type                 = cut-off
-vdw-modifier             = Potential-shift-Verlet
-rvdw-switch              = 1.0
-rvdw                     = 1.0
-
-
-constraints              = none
-constraint-algorithm     = Lincs
-
+; Parameters describing what to do, when to stop and what to save
+integrator  = steep  ; Algorithm (steep = steepest descent minimization)
+emtol       = 1000.0 ; Stop minimization when the maximum force < 1000.0 kJ/mol/nm
+emstep      = 0.01   ; Minimization step size
+nstenergy   = 500    ; save energies every 500 steps, so we can observe if we are successful
+nsteps      = 1000     ; run as long as we need
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = h-bonds   ; bonds involving H are constrained
+rcoulomb                = 1.0       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.0       ; short-range van der Waals cutoff (in nm)
+vdw-modifier            = Potential-shift-Verlet ; Amber specific
+DispCorr                = EnerPres  ; account for cut-off vdW scheme
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+fourierspacing          = 0.125     ; grid spacing for FFT
